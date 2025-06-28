@@ -95,7 +95,7 @@ class CWidgetDashboardConnector extends CWidget {
 	checkReferences(p) {
 		const currentCookie = this.getReferenceFromCookie(this.reference);
 		if (currentCookie) {
-			if (this._fields.groupids.length == 0 && this._fields.hostid.length == 0) {
+			if (this._fields.groupids.length == 0 && this._fields.hostids.length == 0) {
 				return currentCookie;
 			}
 		}

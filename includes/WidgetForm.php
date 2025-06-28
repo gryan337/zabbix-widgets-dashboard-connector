@@ -75,7 +75,7 @@ class WidgetForm extends CWidgetForm {
 				new CWidgetFieldColor('background_color', _('Background color'))
 			)
 			->addField(
-				new CWidgetFieldColor('font_color_color', _('Selected dashboard font color'))
+				new CWidgetFieldColor('font_color_selected', _('Selected dashboard font color'))
 			)
 			;
 	}
