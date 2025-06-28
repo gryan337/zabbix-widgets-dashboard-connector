@@ -35,17 +35,25 @@ class WidgetView extends CControllerDashboardWidgetView {
 			$current_dashboard_id = CProfile::get('web.dashboard.dashboardid');
 		}
 
-		$my_dashboard = API::Dashboard()->get([
-			'dashboardids' => $current_dashboard_id,
-			'selectPages' => ['name']
-		]);
-
-
 		// Get the current dashboard's page name
-		foreach ($my_dashboard as $db_details) {
-			$page_name_referer = $db_details['pages'][$current_page - 1]['name'];
+		if ($this->isTemplateDashboard()) {
+			$page_name_referer = '';
+			$my_dashboard = [];
+			$my_dashboard[] = ['name' => ''];
 		}
+		else {
+			// Get the current dashboard's page name
+			$my_dashboard = API::Dashboard()->get([
+				'dashboardids' => $current_dashboard_id,
+				'selectPages' => ['name']
+			]);
 
+			foreach ($my_dashboard as $db_details) {
+				$page_name_referer = array_key_exists($current_page - 1, $db_details['pages'])
+					? $db_details['pages'][$current_page - 1]['name']
+					: $db_details['pages'][0]['name'];
+			}
+		}
 
 		// Retrieve all dashboards that the user specified in the form
 		foreach ($dashboard_form_patterns as $pattern) {
@@ -75,6 +83,7 @@ class WidgetView extends CControllerDashboardWidgetView {
 			}
 			$destination_dashboards[$dashboardid]['page_num'] = $destination_page_num + 1;
 			$destination_dashboards[$dashboardid]['name'] = $values['name'];
+			$destination_dashboards[$dashboardid]['is_current'] = $my_dashboard[0]['name'] == $values['name'] ? true : false;
 		}
 
 		// sort ascendingly by dashboard name

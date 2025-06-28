@@ -3,6 +3,7 @@
 namespace Modules\DashboardConnector\Includes;
 
 use Zabbix\Widgets\CWidgetField;
+use API;
 
 class CWidgetFieldDashboardPatternSelect extends CWidgetField {
 
@@ -24,9 +25,32 @@ class CWidgetFieldDashboardPatternSelect extends CWidgetField {
 			return $errors;
 		}
 
-		if (empty($this->getValue())) {
+		$value = $this->getValue();
+		if (empty($value)) {
 			$errors[] = _s('Error "%1$s": %2$s.', _('Dashboard pattern'), _('A value is required'));
 		}
+
+		$field_value = [];
+		foreach ($value as $val) {
+			if (is_numeric($val)) {
+				$db = API::Dashboard()->get([
+					'dashboardids' => $val,
+					'output' => ['name']
+				]);
+
+				if ($db) {
+					$field_value[] = $db[0]['name'];
+				}
+				else {
+					$field_value[] = $val;
+				}
+			}
+			else {
+				$field_value[] = $val;
+			}
+		}
+
+		$this->setValue($field_value);
 
 		return $errors;
 	}

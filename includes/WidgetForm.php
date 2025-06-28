@@ -4,7 +4,6 @@ namespace Modules\DashboardConnector\Includes;
 
 use Modules\DashboardConnector\Widget;
 use Modules\DashboardConnector\Includes\CWidgetFieldDashboardPatternSelect;
-use Modules\DashboardConnector\Includes\CWidgetFieldMultiSelectDashboard;
 use Zabbix\Widgets\CWidgetField;
 use Zabbix\Widgets\CWidgetForm;
 use Zabbix\Widgets\Fields\{
@@ -12,9 +11,14 @@ use Zabbix\Widgets\Fields\{
 	CWidgetFieldCheckBoxList,
 	CWidgetFieldColor,
 	CWidgetFieldIntegerBox,
+	CWidgetFieldMultiSelectGroup,
+	CWidgetFieldMultiSelectHost,
 	CWidgetFieldPatternSelect,
-	CWidgetFieldSelect
+	CWidgetFieldSelect,
+	CWidgetFieldTimePeriod
 };
+
+use CWidgetsData;
 
 
 class WidgetForm extends CWidgetForm {
@@ -26,18 +30,32 @@ class WidgetForm extends CWidgetForm {
 				(new CWidgetFieldDashboardPatternSelect('dashboards', _('Dashboard pattern')))
 					->setFlags(CWidgetField::FLAG_NOT_EMPTY | CWidgetField::FLAG_LABEL_ASTERISK)
 			)
-#			->addField(
-#				(new CWidgetFieldMultiSelectDashboard('dashboardid', _('Dashboards')))
-#					->setFlags(CWidgetField::FLAG_NOT_EMPTY | CWidgetField::FLAG_LABEL_ASTERISK)
-#					->setMultiple(1)
-#			)
+			->addField($this->isTemplateDashboard()
+				? null
+				: new CWidgetFieldMultiSelectGroup('groupids', _('Host groups'))
+			)
+			->addField($this->isTemplateDashboard()
+				? null
+				: new CWidgetFieldMultiSelectHost('hostids', _('Hosts'))
+			)
+			->addField(
+				(new CWidgetFieldTimePeriod('time_period', _('Time period')))
+					->setDefault([
+						CWidgetField::FOREIGN_REFERENCE_KEY => CWidgetField::createTypedReference(
+							CWidgetField::REFERENCE_DASHBOARD,
+							CWidgetsData::DATA_TYPE_TIME_PERIOD
+						)
+					])
+					->setDefaultPeriod(['from' => 'now-1h', 'to' => 'now'])
+					->setFlags(CWidgetField::FLAG_NOT_EMPTY | CWidgetField::FLAG_LABEL_ASTERISK)
+			)
 			->addField(
 				(new CWidgetFieldCheckBox('url_target', _('Open in new tab')))
 					->setDefault(0)
 			)
 			->addField(
 				(new CWidgetFieldSelect('font_family', _('Font family'), Widget::FONT_FAMILY))
-						->setDefault(3)
+					->setDefault(3)
 			)
 			->addField(
 				(new CWidgetFieldIntegerBox('font_size', _('Font size'), 10, 48))
@@ -56,7 +74,10 @@ class WidgetForm extends CWidgetForm {
 			->addField(
 				new CWidgetFieldColor('background_color', _('Background color'))
 			)
-		;
+			->addField(
+				new CWidgetFieldColor('font_color_color', _('Selected dashboard font color'))
+			)
+			;
 	}
 
 }

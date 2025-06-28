@@ -6,6 +6,7 @@ use Zabbix\Widgets\CWidgetField;
 use Modules\DashboardConnector\Includes\CWidgetFieldDashboardPatternSelect;
 use CWidgetFieldView;
 use CPatternSelect;
+use CLabel;
 
 class CWidgetFieldDashboardPatternSelectView extends CWidgetFieldView {
 
@@ -22,7 +23,7 @@ class CWidgetFieldDashboardPatternSelectView extends CWidgetFieldView {
 	}
 
 	public function getFocusableElementId(): string {
-		return zbx_formatDomId($this->field->getName().'[]').'_ms';
+		return zbx_formatDomId($this->field->getName().'[]');
 	}
 
 	public function getView(): CPatternSelect {

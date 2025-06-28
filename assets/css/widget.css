@@ -1,7 +1,45 @@
 .dashboard-widget-dashboard-connector-wrapper {
+  .display: flex;
+    width: 100%;
+    height: 100%;
     display: flex;
-	width: 100%;
-	height: 100%;
-	display: flex;
-	word-break: break-word;
+    word-break: break-word;
+    overflow: auto;
+}
+
+[theme="blue-theme"] .sticky-ts {
+	--nav-background: rgba(235, 238, 240, 0.8);
+}
+
+[theme="hc-light"] .sticky-ts {
+	--nav-background: rgba(255, 258, 255, 0.7);
+}
+
+[theme="dark-theme"] .sticky-ts {
+	--nav-background: rgba(14, 16, 18, 0.8);
+}
+
+[theme="hc-dark"] .sticky-ts {
+	--nav-background: rgba(14, 16, 18, 0.8);
+}
+
+.sticky-ts {
+  position: sticky !important;
+  top: 0;
+  z-index: 100;
+  padding: 2px 0 !important;
+  background-color: var(--nav-background) !important;
+}
+
+.sticky-ts .ui-tabs-nav,
+.sticky-ts nav > ul {
+  background-color: var(--nav-background);
+}
+
+.sticky-ts.header-navigation {
+  z-index: 101;
+}
+
+.sticky-ts.dashboard-navigation {
+  z-index: 99;
 }

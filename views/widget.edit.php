@@ -2,17 +2,34 @@
 
 use Modules\DashboardConnector\Includes;
 use Modules\DashboardConnector\Includes\CWidgetFieldDashboardPatternSelectView;
-use Modules\DashboardConnector\Includes\CWidgetFieldMultiSelectDashboardView;
 
+$groupids = array_key_exists('groupids', $data['fields'])
+	? new CWidgetFieldMultiSelectGroupView($data['fields']['groupids'])
+	: null;
 
 (new CWidgetFormView($data))
 	->addField(
 		(new CWidgetFieldDashboardPatternSelectView($data['fields']['dashboards']))
 			->setPlaceholder(_('dashboard pattern'))
 	)
-#	->addField(
-#		(new CWidgetFieldMultiSelectDashboardView($data['fields']['dashboardid']))
-#	)
+	->addField(
+		($groupids)
+			->setFieldHint(
+				makeHelpIcon(_('Host groups specified will be passed to the host navigator widget when clicking the link to the destination dashboard'))
+			)
+	)
+	->addField(array_key_exists('hostids', $data['fields'])
+		? (new CWidgetFieldMultiSelectHostView($data['fields']['hostids']))
+			->setFilterPreselect([
+				'id' => $groupids->getId(),
+				'accept' => CMultiSelect::FILTER_PRESELECT_ACCEPT_ID,
+				'submit_as' => 'groupid'
+			])
+			->setFieldHint(
+				makeHelpIcon(_('Hosts specified will be passed to the host navigator widget when clicking the link to the destination dashboard'))
+			)
+		: null
+	)
 	->addField(
 		(new CWidgetFieldCheckBoxView($data['fields']['url_target']))
 			->setFieldHint(
@@ -31,10 +48,15 @@ use Modules\DashboardConnector\Includes\CWidgetFieldMultiSelectDashboardView;
 	)
 	->addField(
 		new CWidgetFieldColorView($data['fields']['font_color']),
-		'js-row-bg-color'
 	)
 	->addField(
 		new CWidgetFieldColorView($data['fields']['background_color']),
+	)
+	->addField(
+		(new CWidgetFieldColorView($data['fields']['font_color_selected']))
+			->setFieldHint(
+				makeHelpIcon(_('Selected dashboards will be highlighted with this color.'))
+			)
 	)
 	->includeJsFile('widget.edit.js.php')
 	->addJavaScript('widget_dashboard_connector_form.init();')
