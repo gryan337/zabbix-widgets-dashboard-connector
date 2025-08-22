@@ -545,7 +545,11 @@ class CWidgetItemNavigatorRME extends CWidget {
 			infoDiv.classList.add('nav-hoverable-itemn');
 		}
 
-		this._container.addEventListener('click', (event) => {
+		if (this._delegatedClickHandler) {
+			this._container.removeEventListener('click', this._delegatedClickHandler);
+		}
+
+		this._delegatedClickHandler = (event) => {
 			const infoDiv = event.target.closest('.navigation-tree-node-info');
 			if (!infoDiv || event.target.closest('button')) return;
 
@@ -553,12 +557,15 @@ class CWidgetItemNavigatorRME extends CWidget {
 			this.hideGroupNodes();
 
 			const groupNode = infoDiv.closest('.navigation-tree-node-is-group');
+			this.#selected_group_identifier = JSON.parse(groupNode.getAttribute('data-group_identifier'));
 			const descendantIds = groupNode?.getAttribute('data-ids');
 
 			this.#selected_itemid_group = descendantIds;
 			this.markSelected(infoDiv);
 			this.refreshTree();
-		});
+		};
+
+		this._container.addEventListener('click', this._delegatedClickHandler);
 
 	}
 
