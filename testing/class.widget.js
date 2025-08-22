@@ -411,6 +411,12 @@ class CWidgetItemNavigatorRME extends CWidget {
 		const nodes = this._container.querySelectorAll('[data-group_identifier]');
 		nodes.forEach(node => {
 			node.classList.remove('navigation-tree-node-is-open');
+			const infoDiv = node.querySelector('.navigation-tree-node-info');
+			const arrowSpan = infoDiv?.querySelector('.navigation-tree-node-info-arrow span');
+
+			if (arrowSpan) {
+				arrowSpan.className = 'arrow-right';
+			}
 		});
 	}
 
