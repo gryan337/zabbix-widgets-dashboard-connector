@@ -41,12 +41,9 @@ $final_hids = array_values($this->data['fields_values']['hostids'])
 	? array_values($this->data['fields_values']['hostids'])
 	: $cookie_hids;
 
-$final_itids = $ref_cookie ? array_values($ref_cookie['itemids']) : [];
-
 $references = [
 	'hostids' => $final_hids,
-	'hostgroupids' => $final_hgids,
-	'itemids' => $final_itids
+	'hostgroupids' => $final_hgids
 ];
 
 foreach ($this->data['dashboards'] as $dashboardid => $values) {

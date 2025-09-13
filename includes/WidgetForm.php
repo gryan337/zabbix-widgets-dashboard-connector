@@ -69,13 +69,13 @@ class WidgetForm extends CWidgetForm {
 				])
 			)
 			->addField(
-				new CWidgetFieldColor('font_color', _('Font color'))
+				(new CWidgetFieldColor('font_color', _('Font color')))->allowInherited()
 			)
 			->addField(
-				new CWidgetFieldColor('background_color', _('Background color'))
+				(new CWidgetFieldColor('background_color', _('Background color')))->allowInherited()
 			)
 			->addField(
-				new CWidgetFieldColor('font_color_selected', _('Selected dashboard font color'))
+				(new CWidgetFieldColor('font_color_selected', _('Selected dashboard font color')))->allowInherited()
 			)
 			;
 	}
