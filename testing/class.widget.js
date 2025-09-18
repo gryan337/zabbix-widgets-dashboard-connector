@@ -16,6 +16,7 @@
 
 
         showTooltip(target, message) {
+                document.querySelectorAll('.tooltip-warning').forEach(el => el.remove());
                 const tooltip = document.createElement('div');
                 tooltip.className = 'tooltip-warning';
 
