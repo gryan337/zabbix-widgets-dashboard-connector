@@ -1,82 +1,91 @@
-                                infoDiv.addEventListener('click', (event) => {
-                                        if (!event.target.closest('button')) {
-                                                event.stopPropagation();
-                                                infoDiv.classList.add('waiting');
-                                                setTimeout(() => infoDiv.classList.remove('waiting'), 500);
-                                                this.showTooltip(infoDiv, 'Please wait until the previous request has completed');
-                                                this.hideGroupNodes();
-                                                this.#selected_groupid = groupID;
-                                                this.markSelected(infoDiv);
-                                                this.refreshTree();
-                                                this.scrollToSelection();
-                                        }
-                                });
+#matchesFilter(text, searchValue, filterMode, caseSensitive = false) {
+    text = text.trim();
+    searchValue = searchValue.trim();
+    if (!caseSensitive) text = text.toLowerCase();
 
+    switch (filterMode) {
+        case 'boolean': {
+            // --- Tokenizer ---
+            // Handles: parentheses, AND/OR/NOT, quoted strings, and bare words
+            const tokenize = expr => {
+                const tokens = [];
+                const regex = /"([^"\\]*(?:\\.[^"\\]*)*)"|'([^'\\]*(?:\\.[^'\\]*)*)'|(\bAND\b|\bOR\b|\bNOT\b)|([()])|([^()\s]+)/gi;
+                let match;
+                while ((match = regex.exec(expr)) !== null) {
+                    if (match[1] !== undefined) tokens.push(match[1]);        // double-quoted
+                    else if (match[2] !== undefined) tokens.push(match[2]);   // single-quoted
+                    else if (match[3] !== undefined) tokens.push(match[3].toUpperCase()); // operator
+                    else if (match[4] !== undefined) tokens.push(match[4]);   // parenthesis
+                    else if (match[5] !== undefined) tokens.push(match[5]);   // bare word
+                }
+                return tokens;
+            };
 
+            // --- Recursive Descent Parser ---
+            const parseExpression = tokens => {
+                const parseTerm = () => {
+                    let node = parseFactor();
+                    while (tokens[0] === 'AND') {
+                        tokens.shift();
+                        node = { op: 'AND', left: node, right: parseFactor() };
+                    }
+                    return node;
+                };
 
+                const parseFactor = () => {
+                    const tok = tokens.shift();
+                    if (tok === '(') {
+                        const node = parseExpression(tokens);
+                        if (tokens[0] === ')') tokens.shift();
+                        return node;
+                    }
+                    if (tok === 'NOT') {
+                        return { op: 'NOT', value: parseFactor() };
+                    }
+                    return tok;
+                };
 
-        showTooltip(target, message) {
-                document.querySelectorAll('.tooltip-warning').forEach(el => el.remove());
-                const tooltip = document.createElement('div');
-                tooltip.className = 'tooltip-warning';
+                let node = parseTerm();
+                while (tokens[0] === 'OR') {
+                    tokens.shift();
+                    node = { op: 'OR', left: node, right: parseTerm() };
+                }
+                return node;
+            };
 
-                tooltip.innerHTML = `
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
-                                viewBox="0 0 24 24" aria-hidden="true">
-                                <polygon points="12,2 22,12 12,22 2,12"
-                                fill="#FFD700" stroke="black" stroke-width="2"/>
-                                <text x="12" y="16" text-anchor="middle" font-size="14"
-                                font-weight="bold" fill="black">!</text>
-                        </svg>
-                        <span>${message}</span>
-                `;
+            // --- Evaluator ---
+            const evaluateNode = (node, text) => {
+                if (typeof node === 'string') {
+                    const term = caseSensitive ? node : node.toLowerCase();
+                    const isRegex = term.startsWith('^') || term.endsWith('$') || /[.*+?()[\]|]/.test(term);
+                    try {
+                        return isRegex
+                            ? new RegExp(term, caseSensitive ? '' : 'i').test(text)
+                            : text.includes(term);
+                    } catch {
+                        return false;
+                    }
+                }
+                switch (node.op) {
+                    case 'AND': return evaluateNode(node.left, text) && evaluateNode(node.right, text);
+                    case 'OR':  return evaluateNode(node.left, text) || evaluateNode(node.right, text);
+                    case 'NOT': return !evaluateNode(node.value, text);
+                }
+            };
 
-                document.body.appendChild(tooltip);
-
-                const rect = target.getBoundingClientRect();
-                tooltip.style.top = rect.top + window.scrollY - tooltip.offsetHeight - 8 + "px";
-                tooltip.style.left = rect.left + window.scrollX + rect.width / 2 - tooltip.offsetWidth / 2 + "px";
-
-                requestAnimationFrame(() => tooltip.classList.add("show"));
-
-                setTimeout(() => {
-                        tooltip.classList.remove("show");
-                        tooltip.addEventListener("transitionend", () => tooltip.remove(), { once: true });
-                }, 1500);
+            // --- Driver logic ---
+            try {
+                const tokens = tokenize(searchValue);
+                const ast = parseExpression(tokens);
+                return evaluateNode(ast, text);
+            } catch (e) {
+                console.error('Boolean filter parse error:', e);
+                return false;
+            }
         }
 
-
-
-                                .waiting {
-                                        cursor: wait !important;
-                                        animation: shake 0.3s;
-                                }
-                                @keyframes shake {
-                                        0% { transform: translateX(0px); }
-                                        25% { transform: translateX(-3px); }
-                                        50% { transform: translateX(3px); }
-                                        75% { transform: translateX(-3px); }
-                                        100% { transform: translateX(0px); }
-                                }
-                                .tooltip-warning {
-                                        position: absolute;
-                                        background: #6a0dad;
-                                        color: #fff;
-                                        padding: 6px 10px;
-                                        border-radius: 6px;
-                                        font-size: 13px;
-                                        font-weight: 500;
-                                        display: flex;
-                                        align-items: center;
-                                        gap: 6px;
-                                        box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-                                        z-index: 9999;
-                                        pointer-events: none;
-                                        opacity: 0;
-                                        transform: translateY(-6px);
-                                        transition: opacity 0.2s ease, transform 0.2s ease;
-                                }
-                                .tooltip-warning.show {
-                                        opacity: 1;
-                                        transform: translateY(0);
-                                }
+        // --- other filter modes ---
+        default:
+            return text.includes(searchValue);
+    }
+}
