@@ -5,7 +5,7 @@
 	"name": "Dashboard connector",
 	"namespace": "DashboardConnector",
 	"version": "1.0",
-	"author": "Ryan Eberly",
+	"author": "RME",
 	"actions": {
 		"widget.dashboardconnector.view": {
 			"class": "WidgetView"
