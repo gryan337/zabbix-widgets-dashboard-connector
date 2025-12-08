@@ -351,11 +351,10 @@ class CWidgetDashboardConnector extends CWidget {
 			// Setup scroll handlers BEFORE showing the dropdown
 			setupRepositionHandlers();
 
-			dropdownList.style.display = 'block';
-
 			requestAnimationFrame(() => {
 				// Position and show
 				positionDropdownList();
+				dropdownList.style.display = 'block';
 				dropdownToggle.classList.add('open');
 				dropdownToggle.setAttribute('aria-expanded', 'true');
 
