@@ -17,6 +17,9 @@ class CWidgetDashboardConnector extends CWidget {
 		this.theme = jQuery('html').attr('theme') || 'blue-theme';
 		this.widgetBody = this._target.getElementsByClassName('dashboard-widget-dashboard-connector-wrapper').item(0);
 		this.reference = "references";
+		this.searchInputHasFocus = false;
+		this.dropdownToggleHasFocus = false;
+		this.dropdownListHasFocus = false;
 
 		if (this._fields.display_style === 1) {
 			this.widgetBody.classList.add('dropdown-display');
@@ -243,7 +246,7 @@ class CWidgetDashboardConnector extends CWidget {
 			}
 
 			if (mRect.bottom > window.innerHeight) {
-				const altTop = Math.round(rect.top - mRect.height - 4);
+				const altTop = Math.round(rect.top - mRect.height - 28);
 				if (altTop > 8) {
 					dropdownList.style.top = `${altTop}px`;
 					dropdownList.classList.add('dropdown-above');
@@ -343,6 +346,7 @@ class CWidgetDashboardConnector extends CWidget {
 		// Open list function
 		const openList = (skipFocus = false) => {
 			this._pauseUpdating();
+
 			// Ensure list is in DOM
 			if (!document.body.contains(dropdownList)) {
 				document.body.appendChild(dropdownList);
@@ -385,7 +389,11 @@ class CWidgetDashboardConnector extends CWidget {
 			cleanupRepositionHandlers();
 			cleanupOutsideClickHandler();
 
-			this._resumeUpdating();
+			setTimeout(() => {
+				if (!hasInteractiveFocus()) {
+					this._resumeUpdating();
+				}
+			}, 10);
 		};
 
 		// Focus item function
@@ -405,6 +413,10 @@ class CWidgetDashboardConnector extends CWidget {
 			}
 		};
 
+		const hasInteractiveFocus = () => {
+			return this.searchInputHasFocus || this.dropdownToggleHasFocus || this.dropdownListHasFocus;
+		};
+
 		// Toggle dropdown - ONLY stop propagation on the button itself
 		dropdownToggle.addEventListener('click', (e) => {
 			e.stopPropagation();
@@ -417,6 +429,20 @@ class CWidgetDashboardConnector extends CWidget {
 			else {
 				openList();
 			}
+		});
+
+		dropdownToggle.addEventListener('focus', (e) => {
+			this.dropdownToggleHasFocus = true;
+			this._pauseUpdating();
+		});
+
+		dropdownToggle.addEventListener('blue', (e) => {
+			this.dropdownToggleHasFocus = false;
+			setTimeout(() => {
+				if (!hasInteractiveFocus()) {
+					this._resumeUpdating();
+				}
+			}, 10);
 		});
 
 		// Add click handlers to dropdown items = only stop propagation on actual item clicks
@@ -447,6 +473,20 @@ class CWidgetDashboardConnector extends CWidget {
 					}
 				});
 			}
+		});
+
+		dropdownList.addEventListener('focus', (e) => {
+			this.dropdownListHasFocus = true;
+			this._pauseUpdating();
+		});
+
+		dropdownList.addEventListener('blue', (e) => {
+			this.dropdownListHasFocus = false;
+			setTimeout(() => {
+				if (!hasInteractiveFocus()) {
+					this._resumeUpdating();
+				}
+			}, 10);
 		});
 
 		dropdownList.querySelectorAll('.dashboard-dropdown-item').forEach((dropdownItem, index) => {
@@ -537,11 +577,17 @@ class CWidgetDashboardConnector extends CWidget {
 
 		// Search functionality
 		searchInput.addEventListener('focus', (e) => {
+			this.searchInputHasFocus = true;
 			this._pauseUpdating();
 		});
 
 		searchInput.addEventListener('blur', (e) => {
-			this._resumeUpdating();
+			this.searchInputHasFocus = false;
+			setTimeout(() => {
+				if (!hasInteractiveFocus()) {
+					this._resumeUpdating();
+				}
+			}, 10);
 		});
 
 		searchInput.addEventListener('input', (e) => {
