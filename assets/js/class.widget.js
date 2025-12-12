@@ -51,7 +51,7 @@ class CWidgetDashboardConnector extends CWidget {
 		const observer = new MutationObserver(mutations => {
 			mutations.forEach(mutation => {
 				if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
-					this.boundAdjustNavg();
+					this.boundAdjustNav();
 				}
 			});
 		});
