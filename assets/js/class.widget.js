@@ -150,11 +150,7 @@ class CWidgetDashboardConnector extends CWidget {
 		const currentDashboard = items.find(item => item.isCurrentDashboard);
 		dropdownToggle.innerHTML = `
 			<span class="dropdown-toggle-text">Browse dashboards</span>
-			<span class="dropdown-toggle-arrow">
-			    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" style="transform: scaleY(2.2);" aria-hidden="true">
-			      <path fill="currentColor" d="M7 10l5 5 5-5z"/>
-			    </svg>
-			</span>
+			<span class="dropdown-toggle-arrow">▼</span>
 		`;
 
 		// Assemble the dropdown container
