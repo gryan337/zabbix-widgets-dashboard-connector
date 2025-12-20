@@ -28,7 +28,7 @@ class Widget extends CWidget  {
 	];
 
 	public function getDefaultName(): string {
-		return _('Dashboard connector');
+		return _('RME Dashboard connector');
 	}
 
 }

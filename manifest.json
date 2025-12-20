@@ -2,10 +2,11 @@
 	"manifest_version": 2.0,
 	"id": "dashboardconnector",
 	"type": "widget",
-	"name": "Dashboard connector",
+	"name": "RME Dashboard connector",
 	"namespace": "DashboardConnector",
 	"version": "1.0",
-	"author": "Ryan Eberly",
+	"author": "RME",
+	"description": "A widget that enables one-click navigation to other global dashboards",
 	"actions": {
 		"widget.dashboardconnector.view": {
 			"class": "WidgetView"
