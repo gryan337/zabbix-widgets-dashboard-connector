@@ -313,7 +313,7 @@ body > .dashboard-dropdown-list .current-marker {
 
 [theme="blue-theme"] body > .dashboard-dropdown-list .dashboard-dropdown-item:not(.current-dashboard):hover .dashboard-item-content,
 [theme="blue-theme"] body > .dashboard-dropdown-list .dashboard-dropdown-item:not(.current-dashboard).focused .dashboard-item-content {
-	background-color: #F3F4F6 !important;
+	background-color: #CCD0D9 !important;
 }
 
 [theme="blue-theme"] body > .dashboard-dropdown-list .dashboard-dropdown-item.focused .dashboard-item-content {
@@ -489,7 +489,7 @@ body > .dashboard-dropdown-list .current-marker {
 
 [theme="hc-light"] body > .dashboard-dropdown-list .dashboard-dropdown-item:not(.current-dashboard):hover .dashboard-item-content,
 [theme="hc-light"] body > .dashboard-dropdown-list .dashboard-dropdown-item:not(.current-dashboard).focused .dashboard-item-content {
-	background-color: #F0F0F0 !important;
+	background-color: #D3D3D3 !important;
 }
 
 [theme="hc-light"] body > .dashboard-dropdown-list .dashboard-dropdown-item.focused .dashboard-item-content {
@@ -577,7 +577,7 @@ body > .dashboard-dropdown-list .current-marker {
 
 [theme="hc-dark"] body > .dashboard-dropdown-list .dashboard-dropdown-item:not(.current-dashboard):hover .dashboard-item-content,
 [theme="hc-dark"] body > .dashboard-dropdown-list .dashboard-dropdown-item:not(.current-dashboard).focused .dashboard-item-content {
-	background-color: #1A1A1A !important;
+	background-color: #5E5E5E !important;
 }
 
 [theme="hc-dark"] body > .dashboard-dropdown-list .dashboard-dropdown-item.focused .dashboard-item-content {
