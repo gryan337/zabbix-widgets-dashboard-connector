@@ -23,6 +23,11 @@ use CWidgetsData;
 
 class WidgetForm extends CWidgetForm {
 
+	public const DISPLAY_OPTIONS = [
+		0 => 'List',
+		1 => 'Search w/ Dropdown'
+	];
+
 	public function addFields(): self {
 
 		return $this
@@ -54,11 +59,15 @@ class WidgetForm extends CWidgetForm {
 					->setDefault(0)
 			)
 			->addField(
+				(new CWidgetFieldSelect('display_style', _('Display style'), self::DISPLAY_OPTIONS))
+					->setDefault(0)
+			)
+			->addField(
 				(new CWidgetFieldSelect('font_family', _('Font family'), Widget::FONT_FAMILY))
 					->setDefault(3)
 			)
 			->addField(
-				(new CWidgetFieldIntegerBox('font_size', _('Font size'), 10, 48))
+				(new CWidgetFieldIntegerBox('font_size', _('Font size'), 10, 36))
 					->setDefault(12)
 			)
 			->addField(

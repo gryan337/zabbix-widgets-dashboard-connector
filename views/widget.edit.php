@@ -37,6 +37,12 @@ $groupids = array_key_exists('groupids', $data['fields'])
 			)
 	)
 	->addField(
+		(new CWidgetFieldSelectView($data['fields']['display_style']))
+			->setFieldHint(
+				makeHelpIcon(_('The default option is to present a list of the dashboard patterns supplied. \'Search w/ Dropdown\' changed the display by not showing any dashboards and instead presenting a search box with a dropdown allowing to make the panel more compact, interaction with modern styling'))
+			)
+	)
+	->addField(
 		new CWidgetFieldSelectView($data['fields']['font_family'])
 	)
 	->addField(
