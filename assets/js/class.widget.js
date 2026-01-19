@@ -3,6 +3,19 @@ class CWidgetDashboardConnector extends CWidget {
 		return false;
 	}
 
+	onResize() {
+		if (this._closeList) {
+			this._closeList();
+		}
+	}
+
+	onClearContents() {
+		if (this._autocompleteDragObserver) {
+			this._autocompleteDragObserver.disconnect();
+			this._autocompleteDragObserver = null;
+		}
+	}
+
 	setContents(response) {
 		// If we already have a dropdown list, remove it first
 		if (this.dropdownList && this.dropdownList.parentNode) {
@@ -339,6 +352,24 @@ class CWidgetDashboardConnector extends CWidget {
 			}
 		};
 
+		// Watch for dragging via MutationObserver
+                const dragObserver = new MutationObserver((mutations) => {
+			mutations.forEach((mutation) => {
+				if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+					if (this._isDragging() && dropdownList.style.display !== 'none') {
+						closeList();
+					}
+				}
+			});
+		});
+
+		dragObserver.observe(this._target, {
+			attributes: true,
+			attributeFilter: ['class']
+		});
+
+		this._autocompleteDragObserver = dragObserver;
+
 		// Open list function
 		const openList = (skipFocus = false) => {
 			this._pauseUpdating();
@@ -391,6 +422,8 @@ class CWidgetDashboardConnector extends CWidget {
 				}
 			}, 10);
 		};
+
+		this._closeList = closeList;
 
 		// Focus item function
 		const focusItem = (index) => {
