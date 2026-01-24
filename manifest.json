@@ -13,6 +13,14 @@
 		}
 	},
 	"widget": {
+		"in": {
+			"hostids": {
+				"type": "_hostid"
+			},
+			"groupids": {
+				"type": "_hostgroupids"
+			}
+		},
 		"name": "DashboardConnector",
 		"size": {
 			"width": 4,
