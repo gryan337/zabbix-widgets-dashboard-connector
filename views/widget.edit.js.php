@@ -37,6 +37,8 @@ window.widget_dashboard_connector_form = new class extends CWidgetForm {
 			});
 		}
 
+		this.ready();
+
 	}
 
 	updateForm() {
