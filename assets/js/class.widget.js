@@ -879,7 +879,7 @@ class CWidgetDashboardConnector extends CWidget {
 				secondElem.style.left = `${secondElemRect.left}px`;
 				secondElem.style.width = `${secondElem.offsetWidth}px`;
 				secondElem.style.zIndex = '501';
-				firstElem.style.zIndex = '100';
+				firstElem.style.zIndex = '101';
 			}
 			// Position it right below the filter element
 			secondElem.style.top = `${firstElemRect.bottom}px`;
