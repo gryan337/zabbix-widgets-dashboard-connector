@@ -34,7 +34,7 @@
 .sticky-ts {
 	position: sticky !important;
 	top: 0;
-	z-index: 100;
+	z-index: 101;
 	padding: 2px 0 !important;
 	background-color: var(--nav-background) !important;
 }
@@ -45,7 +45,7 @@
 }
 
 .sticky-ts.header-navigation {
-	z-index: 101;
+	z-index: 102;
 }
 
 .sticky-ts.dashboard-navigation {
