@@ -1,6 +1,7 @@
 # zabbix-widgets-dashboard-connector
 A Zabbix UI widget that enables one-click navigation to other global dashboards
 
+## UPDATE This module no longer relies on making changes to the ui/jsrpc.php file in Zabbix. Everything is baked into the module and fully self-contained!
 
 ## Required Zabbix version
 
@@ -24,21 +25,6 @@ A Zabbix UI widget that enables one-click navigation to other global dashboards
  - Go to Zabbix URL -> Administration -> General -> Modules
  - Select `Scan directory` from the top right of the page
  - Find the `Dashboard connector` widget and enable it on the right
-
-
-## Known issues
-
-Unfortunately, the CPatternSelect field this widget uses calls the jsrpc.php file, which does not have handling for dashboard.get() API calls. Until I can properly handle this entirely in the module, you can optionally modify the /usr/share/zabbix/ui/jsrpc.php file under the section that has case patternselect.get:
-
-
-    case 'dashboards':
-        $options = [
-            'output' => ['name'],
-            'search' => ['name' => $search.($wildcard_enabled ? '*' : '')],
-            'searchWildcardsEnabled' => $wildcard_enabled,
-            'sortfield' => 'name',
-            'limit' => $limit
-        ];
 
         $db_result = API::Dashboard()->get($options);
         break;
