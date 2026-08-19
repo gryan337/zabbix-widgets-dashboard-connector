@@ -25,8 +25,3 @@ A Zabbix UI widget that enables one-click navigation to other global dashboards
  - Go to Zabbix URL -> Administration -> General -> Modules
  - Select `Scan directory` from the top right of the page
  - Find the `Dashboard connector` widget and enable it on the right
-
-        $db_result = API::Dashboard()->get($options);
-        break;
-
-This modification would have to be added everytime you upgrade your Zabbix version.
