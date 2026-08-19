@@ -27,7 +27,7 @@ class CWidgetFieldDashboardPatternSelectView extends CWidgetFieldView {
 	}
 
 	public function getView(): CPatternSelect {
-		return (new CPatternSelect([
+		return (new CDashboardPatternSelect([
 			'name' => $this->field->getName().'[]',
 			'object_name' => 'dashboards',
 			'data' => $this->field->getValue(),
