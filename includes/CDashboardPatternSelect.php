@@ -24,6 +24,6 @@ class CDashboardPatternSelect extends CPatternSelect {
 			->setArgument('wildcard_allowed', 1)
 			->getUrl();
 
-		$this-setAttribute('data-params', json_encode($params));
+		$this->setAttribute('data-params', json_encode($params));
 	}
 }
