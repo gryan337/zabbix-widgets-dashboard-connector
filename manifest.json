@@ -12,7 +12,7 @@
 			"class": "WidgetView"
 		},
 		"dashboardconnector.dashboard.patternselect": {
-			"class": "DashboardPatternSelect"
+			"class": "DashboardPatternSelect",
 			"layout": "layout.json"
 		}
 	},

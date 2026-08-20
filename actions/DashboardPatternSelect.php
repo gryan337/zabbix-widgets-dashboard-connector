@@ -27,7 +27,7 @@ class DashboardPatternSelect extends CController {
 		$fields = [
 			'search' =>				'string',
 			'limit' =>				'int32',
-			'wildcard_enabled' =>	'in 0,1'
+			'wildcard_allowed' =>			'in 0,1'
 		];
 
 		$ret = $this->validateInput($fields);
@@ -51,7 +51,7 @@ class DashboardPatternSelect extends CController {
 		$search = $this->getInput('search', '');
 		$search = ($search !== '') ? $search : null;
 
-		$wildcard_enabled = $this->getInput('wildcard_allowed', 0) === 1
+		$wildcard_enabled = $this->getInput('wildcard_allowed', 0) == 1
 			&& $search !== null
 			&& strpos($search, '*') !== false;
 
@@ -90,7 +90,7 @@ class DashboardPatternSelect extends CController {
 		}
 
 		$this->setResponse(new CControllerResponseData([
-			'main_block' =< json_encode(['result' => $result])
+			'main_block' => json_encode(['result' => $result])
 		]));
 	}
 }
